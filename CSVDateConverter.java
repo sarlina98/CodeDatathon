@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+//this was created to change the date format after running info through the LLM API to make the date SQL compatible
 public class CSVDateConverter {
 
     public static void main(String[] args) {

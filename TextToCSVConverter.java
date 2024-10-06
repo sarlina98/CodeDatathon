@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-//this was created to remove the county word that would be added after running throught the LLM API I would have used python but I coul
+//this was created to remove the county word that would be added after running throught the LLM API I would have used python but I
 //couldnt get it to properly compile this weekend :P
 public class TextToCSVConverter {
 

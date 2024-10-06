@@ -1,0 +1,54 @@
+SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));
+SELECT 
+    aqi_2014.LOCAL_DATE AS Date_2014, 
+    aqi_2014.STATE_NAME, 
+    aqi_2014.COUNTY_NAME, 
+    aqi_2014.COUNTY_CODE,
+    aqi_2014.AQI AS AQI_2014, 
+    temp_2014.ARITHMETIC_MEAN AS Temp_2014, 
+    sightings_2014.REPORTINGS AS Sightings_2014, 
+    aqi_2023._DATE AS Date_2023, 
+    aqi_2023.AQI AS AQI_2023, 
+    sightings_2023.REPORTINGS AS Sightings_2023, 
+    temp_2023.ARITHMETIC_MEAN AS Temp_2023, 
+    (aqi_2023.AQI - aqi_2014.AQI) AS AQI_Difference, 
+    (temp_2023.ARITHMETIC_MEAN - temp_2014.ARITHMETIC_MEAN) AS Temp_Difference, 
+    (sightings_2023.REPORTINGS - sightings_2014.REPORTINGS) AS Sightings_Difference
+FROM 
+    aqi_2014 
+JOIN 
+    aqi_2023 
+    ON aqi_2014.STATE_NAME = aqi_2023.STATE_NAME 
+    AND aqi_2014.COUNTY_NAME = aqi_2023.COUNTY_NAME 
+    AND MONTH(aqi_2014.LOCAL_DATE) = MONTH(aqi_2023._DATE) 
+    AND DAY(aqi_2014.LOCAL_DATE) = DAY(aqi_2023._DATE) 
+JOIN 
+    temp_2014 
+    ON temp_2014.STATE_NAME = aqi_2014.STATE_NAME 
+    AND temp_2014.COUNTY_NAME = aqi_2014.COUNTY_NAME 
+    AND temp_2014.LOCAL_DATE = aqi_2014.LOCAL_DATE 
+JOIN 
+    sightings_2014 
+    ON sightings_2014.COUNTY_NAME = aqi_2014.COUNTY_NAME 
+    AND MONTH(aqi_2014.LOCAL_DATE) = MONTH(sightings_2014.LOCAL_DATE) 
+    AND DAY(aqi_2014.LOCAL_DATE) = DAY(sightings_2014.LOCAL_DATE) 
+JOIN 
+    temp_2023 
+    ON temp_2023.STATE_NAME = aqi_2014.STATE_NAME 
+    AND temp_2023.COUNTY_NAME = aqi_2014.COUNTY_NAME 
+    AND MONTH(aqi_2023._DATE) = MONTH(temp_2023.LOCAL_DATE) 
+    AND DAY(aqi_2023._DATE) = DAY(temp_2023.LOCAL_DATE) 
+JOIN 
+    sightings_2023 
+    ON sightings_2023.COUNTY_NAME = aqi_2014.COUNTY_NAME  
+    AND MONTH(aqi_2023._DATE) = MONTH(sightings_2023.LOCAL_DATE)  
+    AND DAY(aqi_2023._DATE) = DAY(sightings_2023.LOCAL_DATE)  
+WHERE 
+	aqi_2014.STATE_NAME = "Maryland"
+    and aqi_2014.LOCAL_DATE > '2014-07-31' 
+    AND aqi_2023._DATE > '2023-07-31' 
+GROUP BY 
+    aqi_2014.LOCAL_DATE, 
+    aqi_2014.COUNTY_NAME 
+ORDER BY 
+    aqi_2014.LOCAL_DATE;

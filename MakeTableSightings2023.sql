@@ -1,0 +1,9 @@
+USE datathon;
+CREATE TABLE sightings_2023 (
+	LOCAL_DATE DATE,
+    REPORTINGS INT,
+    CITY_NAME CHAR(80),
+    STATE_ABREV CHAR(50),
+    COUNTY_NAME CHAR(200)
+    
+);
